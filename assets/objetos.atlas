@@ -1,0 +1,76 @@
+
+objetos.png
+size: 512, 32
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+anillo1
+  rotate: false
+  xy: 286, 16
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+anillo2
+  rotate: false
+  xy: 250, 16
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+anillo3
+  rotate: false
+  xy: 322, 16
+  size: 8, 16
+  orig: 8, 16
+  offset: 0, 0
+  index: -1
+anillo4
+  rotate: false
+  xy: 268, 16
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+anillo5
+  rotate: false
+  xy: 232, 16
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+anillo6
+  rotate: false
+  xy: 304, 16
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+anillo8
+  rotate: false
+  xy: 214, 16
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+gOver
+  rotate: false
+  xy: 0, 16
+  size: 144, 16
+  orig: 144, 16
+  offset: 0, 0
+  index: -1
+pinches1
+  rotate: false
+  xy: 146, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+pinches2
+  rotate: false
+  xy: 180, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
