@@ -5,8 +5,10 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.util.ArrayList;
 
+import com.badlogic.gdx.math.Vector2;
+
+import Pantallas.PantallaJuego;
 import utiles.Global;
 
 public class HiloServidor extends Thread {
@@ -16,10 +18,11 @@ public class HiloServidor extends Thread {
 	private boolean fin = false;
 	private DireccionRed[] clientes = new DireccionRed[2];
 	private int cantClientes = 0;
+	private PantallaJuego app;
 	
-	private ArrayList<DireccionRed> conexiones = new ArrayList<DireccionRed>();
-	
-	public HiloServidor() {
+	public HiloServidor(PantallaJuego app) {
+		this.app = app;
+		
 		try {
 			socket = new DatagramSocket(puerto);
 		} catch (SocketException e) {
@@ -29,17 +32,18 @@ public class HiloServidor extends Thread {
 	
 	@Override
 	public void run() {
-		do {
-			byte[] data = new byte[1024];
-			DatagramPacket dp = new DatagramPacket(data,data.length);
-			try {
-				socket.receive(dp);
-				procesarMensaje(dp);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}while(!fin);
+	    do {
+	        byte[] data = new byte[1024];
+	        DatagramPacket dp = new DatagramPacket(data, data.length);
+	        try {
+	            socket.receive(dp);
+	            procesarMensaje(dp);
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    } while (!fin);
 	}
+
 
 	private void procesarMensaje(DatagramPacket dp) {
 		String msg = (new String(dp.getData())).trim();
@@ -70,49 +74,67 @@ public class HiloServidor extends Thread {
 			if(nroCliente!=-1) {
 				if(msg.equals("teclaArriba")) {
 					if(nroCliente==0) {
-						
+						app.jugador.b2cuerpo.applyLinearImpulse(new Vector2(0, 6f), app.jugador.b2cuerpo.getWorldCenter(), true);
+					}else {
+						app.jugadorAlt.b2cuerpo.applyLinearImpulse(new Vector2(0, 6f), app.jugadorAlt.b2cuerpo.getWorldCenter(), true);
 					}
 				} else if (msg.equals("teclaDer")) {
-					
+					if(nroCliente==0) {
+						app.jugador.b2cuerpo.applyLinearImpulse(new Vector2(0.105f, 0), app.jugador.b2cuerpo.getWorldCenter(), true);
+					}else {
+						app.jugadorAlt.b2cuerpo.applyLinearImpulse(new Vector2(0.105f, 0), app.jugadorAlt.b2cuerpo.getWorldCenter(), true);
+					}
 				} else if(msg.equals("teclaIzq")) {
-					
+					if(nroCliente==0) {
+						app.jugador.b2cuerpo.applyLinearImpulse(new Vector2(-0.105f, 0), app.jugador.b2cuerpo.getWorldCenter(), true);
+					}else {
+						app.jugadorAlt.b2cuerpo.applyLinearImpulse(new Vector2(-0.105f, 0), app.jugadorAlt.b2cuerpo.getWorldCenter(), true);
+					}
 				}
 			}
 		}
-//		System.out.println(msg);
-//		String[] msgCompuesto = msg.split("#");
-//		
-//		if(msgCompuesto.length>1) {
-//			if(msgCompuesto[0].equals("Conexion")) {
-//				
-//				int indiceCliente = -1;
-//				
-//				if(conexiones.size()>0) {
-//					indiceCliente = verificarExisteCliente(dp);
-//				} 
-//				
-//				if(conexiones.size() < 2) {
-//					if(indiceCliente==-1) {
-//						conexiones.add(new DireccionRed(dp.getAddress(), dp.getPort(),msgCompuesto[1]));
-//						enviarMensaje("Conexion exitosa",dp.getAddress(),dp.getPort());
+//			if (nroCliente == 0) {
+//				if(msg.equals("teclaArriba")) {
+//					if(nroCliente==0) {
+//						app.jugador.b2cuerpo.applyLinearImpulse(new Vector2(0, 6f), app.jugador.b2cuerpo.getWorldCenter(), true);
+//					}else {
+//						
 //					}
-//				} else if (conexiones.size() == 2) {
-//					Global.empieza = true;
-//					System.out.println("Empieza");
-//					
-//				} else {
-//					enviarMensaje("La sala esta llena, no se puede conectar",dp.getAddress(),dp.getPort());
-//				}
-//			} else {
-//			if(msg.equals("Desconectar")) {
-//				int indiceCliente = verificarExisteCliente(dp);
-//				if(indiceCliente>-1) {
-//					conexiones.remove(indiceCliente);
-//					enviarMensaje("Desconectado", dp.getAddress(),dp.getPort());
-//				} else {
-//					enviarMensaje("Acceso denegado", dp.getAddress(),dp.getPort());
+//				} else if (msg.equals("teclaDer")) {
+//					if(nroCliente==0) {
+//						app.jugador.b2cuerpo.applyLinearImpulse(new Vector2(0.105f, 0), app.jugador.b2cuerpo.getWorldCenter(), true);
+//					}else {
+//						
+//					}
+//				} else if(msg.equals("teclaIzq")) {
+//					if(nroCliente==0) {
+//						app.jugador.b2cuerpo.applyLinearImpulse(new Vector2(-0.105f, 0), app.jugador.b2cuerpo.getWorldCenter(), true);
+//					}else {
+//						
 //					}
 //				}
+//			} else if (nroCliente == 1) {
+//				if(nroCliente!=-1) {
+//					if(msg.equals("teclaArriba")) {
+//						if(nroCliente==0) {
+//							app.jugadorAlt.b2cuerpo.applyLinearImpulse(new Vector2(0, 6f), app.jugador.b2cuerpo.getWorldCenter(), true);
+//						}else {
+//							
+//						}
+//					} else if (msg.equals("teclaDer")) {
+//						if(nroCliente==0) {
+//							app.jugadorAlt.b2cuerpo.applyLinearImpulse(new Vector2(0.105f, 0), app.jugador.b2cuerpo.getWorldCenter(), true);
+//						}else {
+//							
+//						}
+//					} else if(msg.equals("teclaIzq")) {
+//						if(nroCliente==0) {
+//							app.jugadorAlt.b2cuerpo.applyLinearImpulse(new Vector2(-0.105f, 0), app.jugador.b2cuerpo.getWorldCenter(), true);
+//						}else {
+//							
+//						}
+//					}
+//			}
 //			}
 //		}
 	}
@@ -124,6 +146,18 @@ public class HiloServidor extends Thread {
 			socket.send(dp);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void dispose() {
+	    if (socket != null && !socket.isClosed()) {
+	        socket.close();
+	    }
+	}
+
+	public void enviarMsgATodos(String msg) {
+		for (int i=0; i<clientes.length; i++) {
+			enviarMensaje(msg,clientes[i].getIp(),clientes[i].getPuerto());
 		}
 	}
 

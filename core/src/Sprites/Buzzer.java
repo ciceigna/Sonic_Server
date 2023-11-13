@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.utils.Array;
-import com.sonic.servidor.SonicProject;
+import com.sonic.servidor.SonicServer;
 
 import Pantallas.PantallaJuego;
 
@@ -34,18 +34,18 @@ public class Buzzer extends Enemigo {
 	@Override
 	protected void defineEnemigo() {
 		BodyDef cdef = new BodyDef();
-		cdef.position.set(90 / SonicProject.PPM,775 / SonicProject.PPM);
+		cdef.position.set(90 / SonicServer.PPM,775 / SonicServer.PPM);
 		cdef.type = BodyDef.BodyType.DynamicBody;
 		b2cuerpo = mundo.createBody(cdef);
 		
 		FixtureDef fdef = new FixtureDef();
 		CircleShape forma = new CircleShape();
-		forma.setRadius(16 / SonicProject.PPM);
-		fdef.filter.categoryBits = SonicProject.BIT_ENEMIGO;
-		fdef.filter.maskBits = SonicProject.BIT_PISO |
-				SonicProject.BIT_ANILLO |
-				SonicProject.BIT_ENEMIGO |
-				SonicProject.BIT_OBJETO;
+		forma.setRadius(16 / SonicServer.PPM);
+		fdef.filter.categoryBits = SonicServer.BIT_ENEMIGO;
+		fdef.filter.maskBits = SonicServer.BIT_PISO |
+				SonicServer.BIT_ANILLO |
+				SonicServer.BIT_ENEMIGO |
+				SonicServer.BIT_OBJETO;
 		
 		fdef.shape = forma;
 		b2cuerpo.createFixture(fdef);

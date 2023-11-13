@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.sonic.servidor.SonicProject;
+import com.sonic.servidor.SonicServer;
 
 public class Hud implements Disposable{
 	public Stage escenario;
@@ -32,7 +32,7 @@ public class Hud implements Disposable{
 		puntaje = 0;
 		anillos = 0;
 		
-		viewport = new FitViewport(SonicProject.V_ANCHO,SonicProject.V_ALTO,new OrthographicCamera());
+		viewport = new FitViewport(SonicServer.V_ANCHO,SonicServer.V_ALTO,new OrthographicCamera());
 		escenario = new Stage(viewport, sb);
 		
 		Table mesa = new Table();

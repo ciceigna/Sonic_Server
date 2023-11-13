@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.sonic.servidor.SonicProject;
+import com.sonic.servidor.SonicServer;
 public class B2CreaMundos {
 
 	public B2CreaMundos(World mundo, TiledMap mapa) {
@@ -23,10 +23,10 @@ public class B2CreaMundos {
 			Rectangle rect = ((RectangleMapObject) objeto).getRectangle();
 		
 			cdef.type = BodyDef.BodyType.StaticBody;
-			cdef.position.set(rect.getX() + rect.getWidth() / 2 / SonicProject.PPM, rect.getY() + rect.getHeight() / 2 / SonicProject.PPM);
+			cdef.position.set(rect.getX() + rect.getWidth() / 2 / SonicServer.PPM, rect.getY() + rect.getHeight() / 2 / SonicServer.PPM);
 			
 			
-			forma.setAsBox(rect.getWidth() / 2 / SonicProject.PPM, rect.getHeight() / 2 / SonicProject.PPM);
+			forma.setAsBox(rect.getWidth() / 2 / SonicServer.PPM, rect.getHeight() / 2 / SonicServer.PPM);
 			fdef.shape = forma;
 			
 			cuerpo = mundo.createBody(cdef);
@@ -38,11 +38,11 @@ public class B2CreaMundos {
 			Rectangle rect = ((RectangleMapObject) objeto).getRectangle();
 		
 			cdef.type = BodyDef.BodyType.StaticBody;
-			cdef.position.set(rect.getX() + rect.getWidth() / 2 / SonicProject.PPM, rect.getY() + rect.getHeight() / 2 / SonicProject.PPM);
+			cdef.position.set(rect.getX() + rect.getWidth() / 2 / SonicServer.PPM, rect.getY() + rect.getHeight() / 2 / SonicServer.PPM);
 		
 			cuerpo = mundo.createBody(cdef);
 			
-			forma.setAsBox(rect.getWidth() / 2  / SonicProject.PPM, rect.getHeight() / 2  / SonicProject.PPM);
+			forma.setAsBox(rect.getWidth() / 2  / SonicServer.PPM, rect.getHeight() / 2  / SonicServer.PPM);
 			fdef.shape = forma;
 			cuerpo.createFixture(fdef);
 		}

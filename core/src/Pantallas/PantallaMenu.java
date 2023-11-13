@@ -11,7 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import utiles.Global;
-import com.sonic.servidor.SonicProject;
+import utiles.Utiles;
+
+import com.sonic.servidor.SonicServer;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;	
 
 public class PantallaMenu extends ScreenAdapter {
@@ -19,14 +21,14 @@ public class PantallaMenu extends ScreenAdapter {
     private Table table;
     Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 
-    public PantallaMenu(final SonicProject juego) {
-        stage = new Stage(new FitViewport(SonicProject.V_ANCHO, SonicProject.V_ALTO));
+    public PantallaMenu(final SonicServer juego) {
+        stage = new Stage(new FitViewport(SonicServer.V_ANCHO, SonicServer.V_ALTO));
         Gdx.input.setInputProcessor(stage);
         table = new Table();
         table.setFillParent(true);
         
-        SonicProject.admin.get("audio/musica/gameOver.mp3", Music.class).stop();
-        SonicProject.admin.get("audio/musica/menu.mp3", Music.class).play();
+        SonicServer.admin.get("audio/musica/gameOver.mp3", Music.class).stop();
+        SonicServer.admin.get("audio/musica/menu.mp3", Music.class).play();
         
         TextButton botonJugarLocal = new TextButton("Jugar Local", skin);
         botonJugarLocal.addListener(new ClickListener() {
@@ -41,11 +43,11 @@ public class PantallaMenu extends ScreenAdapter {
         botonConectar.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(Global.empieza) {
-                	juego.setScreen(new PantallaJuego(juego));
-                }else {
-                	juego.setScreen(new PantallaEspera(juego));;
-                }
+                juego.setScreen(new PantallaJuego(juego));
+                
+//        		else {
+//                	juego.setScreen(new PantallaEspera(juego));
+//                }
             }
         });
 

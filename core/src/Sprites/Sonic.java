@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
-import com.sonic.servidor.SonicProject;
+import com.sonic.servidor.SonicServer;
 import com.badlogic.gdx.utils.Array;
 import Pantallas.PantallaJuego;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -68,7 +68,7 @@ public class Sonic extends Sprite {
 	    defineSonic();
 	    sonicQuieto = new TextureRegion(getTexture(), 1410, 2, 27, 59);
 	    sonicMuerto = new TextureRegion(getTexture(), 768, 2, 34, 59);
-	    setBounds(0, 0, getWidth() / SonicProject.PPM, getHeight() / SonicProject.PPM);
+	    setBounds(0, 0, getWidth() / SonicServer.PPM, getHeight() / SonicServer.PPM);
 	    setRegion(sonicQuieto);
 	    
 	    Array<TextureAtlas.AtlasRegion> regionesVelMax = new Array<>();
@@ -86,9 +86,9 @@ public class Sonic extends Sprite {
 //		}
 //		else {
 			Filter filtro = new Filter();
-			filtro.maskBits = SonicProject.BIT_VACIO;
+			filtro.maskBits = SonicServer.BIT_VACIO;
 
-			SonicProject.admin.get("audio/sonidos/s_muerte.wav", Sound.class).play();
+			SonicServer.admin.get("audio/sonidos/s_muerte.wav", Sound.class).play();
 			for(Fixture fixture : b2cuerpo.getFixtureList()) {
 				fixture.setFilterData(filtro);
 			}
@@ -173,19 +173,19 @@ public class Sonic extends Sprite {
 	
 	public void defineSonic() {
 		BodyDef cdef = new BodyDef();
-		cdef.position.set(200 / SonicProject.PPM,775 / SonicProject.PPM);
+		cdef.position.set(200 / SonicServer.PPM,775 / SonicServer.PPM);
 		cdef.type = BodyDef.BodyType.DynamicBody;
 		b2cuerpo = mundo.createBody(cdef);
 		
 		FixtureDef fdef = new FixtureDef();
 		CircleShape forma = new CircleShape();
-		forma.setRadius(16 / SonicProject.PPM);
+		forma.setRadius(16 / SonicServer.PPM);
 		
 		fdef.shape = forma;
 		b2cuerpo.createFixture(fdef);
 		
 		EdgeShape cabeza = new EdgeShape();
-		cabeza.set(new Vector2(-2 / SonicProject.PPM, 5 / SonicProject.PPM), new Vector2(2 / SonicProject.PPM, 5 / SonicProject.PPM));
+		cabeza.set(new Vector2(-2 / SonicServer.PPM, 5 / SonicServer.PPM), new Vector2(2 / SonicServer.PPM, 5 / SonicServer.PPM));
 		fdef.shape = cabeza;
 		fdef.isSensor = true;
 		b2cuerpo.createFixture(fdef).setUserData("cabeza");

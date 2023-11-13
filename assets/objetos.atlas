@@ -1,75 +1,103 @@
 
 objetos.png
-size: 512, 32
+size: 512, 128
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 anillo1
   rotate: false
-  xy: 286, 16
+  xy: 250, 25
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 anillo2
   rotate: false
-  xy: 250, 16
+  xy: 188, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 anillo3
   rotate: false
-  xy: 322, 16
+  xy: 284, 75
   size: 8, 16
   orig: 8, 16
   offset: 0, 0
   index: -1
 anillo4
   rotate: false
-  xy: 268, 16
+  xy: 284, 93
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 anillo5
   rotate: false
-  xy: 232, 16
+  xy: 166, 93
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 anillo6
   rotate: false
-  xy: 304, 16
+  xy: 206, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 anillo8
   rotate: false
-  xy: 214, 16
+  xy: 148, 93
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 gOver
   rotate: false
-  xy: 0, 16
+  xy: 2, 93
   size: 144, 16
   orig: 144, 16
   offset: 0, 0
   index: -1
+jasinski1
+  rotate: false
+  xy: 126, 2
+  size: 60, 89
+  orig: 60, 89
+  offset: 0, 0
+  index: -1
+jasinski2
+  rotate: false
+  xy: 64, 2
+  size: 60, 89
+  orig: 60, 89
+  offset: 0, 0
+  index: -1
+jasinskiSonrisa1
+  rotate: false
+  xy: 2, 2
+  size: 60, 89
+  orig: 60, 89
+  offset: 0, 0
+  index: -1
+jasinskiSonrisa2
+  rotate: false
+  xy: 188, 20
+  size: 60, 89
+  orig: 60, 89
+  offset: 0, 0
+  index: -1
 pinches1
   rotate: false
-  xy: 146, 0
+  xy: 250, 77
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 pinches2
   rotate: false
-  xy: 180, 0
+  xy: 250, 43
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

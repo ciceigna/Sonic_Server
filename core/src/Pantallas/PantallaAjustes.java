@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.sonic.servidor.SonicProject;
+import com.sonic.servidor.SonicServer;
 
 public class PantallaAjustes extends ScreenAdapter {
     private Stage stage;
@@ -32,8 +32,8 @@ public class PantallaAjustes extends ScreenAdapter {
     private Slider volumenGeneralSlider;
     private CheckBox fullscreenCheckbox;
 
-    public PantallaAjustes(final SonicProject juego) {
-        stage = new Stage(new FitViewport(SonicProject.V_ANCHO, SonicProject.V_ALTO));
+    public PantallaAjustes(final SonicServer juego) {
+        stage = new Stage(new FitViewport(SonicServer.V_ANCHO, SonicServer.V_ALTO));
         Gdx.input.setInputProcessor(stage);
         table = new Table();
         table.setFillParent(true);

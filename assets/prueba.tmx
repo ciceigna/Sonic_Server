@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="14" height="15" tilewidth="128" tileheight="128" infinite="0" nextlayerid="11" nextobjectid="61">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="14" height="15" tilewidth="128" tileheight="128" infinite="0" nextlayerid="11" nextobjectid="63">
  <editorsettings>
   <chunksize width="128" height="128"/>
  </editorsettings>
@@ -49,7 +49,8 @@
   <object id="50" x="1472.01" y="780.727" width="255.987" height="18.5455"/>
  </objectgroup>
  <objectgroup id="5" name="piso">
-  <object id="48" x="2.84091e-05" y="1161.02" width="3632" height="758.981"/>
+  <object id="48" x="2.84091e-05" y="1161.02" width="512.004" height="758.981"/>
+  <object id="62" x="576.001" y="1161.01" width="1087.7" height="758.981"/>
  </objectgroup>
  <objectgroup id="8" name="anillos"/>
 </map>

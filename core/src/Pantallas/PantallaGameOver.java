@@ -13,17 +13,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.sonic.servidor.SonicProject;
+import com.sonic.servidor.SonicServer;
 
 public class PantallaGameOver extends ScreenAdapter {
     private Stage stage;
     Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 
-    public PantallaGameOver(final SonicProject juego) {
-        stage = new Stage(new FitViewport(SonicProject.V_ANCHO, SonicProject.V_ALTO));
+    public PantallaGameOver(final SonicServer juego) {
+        stage = new Stage(new FitViewport(SonicServer.V_ANCHO, SonicServer.V_ALTO));
 
-        SonicProject.admin.get("audio/musica/pantallaJuego.mp3", Music.class).stop();
-        SonicProject.admin.get("audio/musica/gameOver.mp3", Music.class).play();
+        SonicServer.admin.get("audio/musica/pantallaJuego.mp3", Music.class).stop();
+        SonicServer.admin.get("audio/musica/gameOver.mp3", Music.class).play();
         
         Gdx.input.setInputProcessor(stage);
 

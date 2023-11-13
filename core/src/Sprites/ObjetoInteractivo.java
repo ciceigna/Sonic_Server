@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.sonic.servidor.SonicProject;
+import com.sonic.servidor.SonicServer;
 
 public abstract class ObjetoInteractivo {
 
@@ -28,11 +28,11 @@ public abstract class ObjetoInteractivo {
 		
 		//anillos
 		cdef.type = BodyDef.BodyType.StaticBody;
-		cdef.position.set(bordes.getX() + bordes.getWidth() / 2 / SonicProject.PPM, bordes.getY() + bordes.getHeight() / 2 / SonicProject.PPM);
+		cdef.position.set(bordes.getX() + bordes.getWidth() / 2 / SonicServer.PPM, bordes.getY() + bordes.getHeight() / 2 / SonicServer.PPM);
 			
 		cuerpo = mundo.createBody(cdef);
 				
-		forma.setAsBox(bordes.getWidth() / 2  / SonicProject.PPM, bordes.getHeight() / 2  / SonicProject.PPM);
+		forma.setAsBox(bordes.getWidth() / 2  / SonicServer.PPM, bordes.getHeight() / 2  / SonicServer.PPM);
 		fdef.shape = forma;
 		cuerpo.createFixture(fdef);
 	}
