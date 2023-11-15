@@ -180,7 +180,7 @@ public class Tails extends Sprite {
 	
 	public void defineTails() {
 		BodyDef cdef = new BodyDef();
-		cdef.position.set(32 / SonicServer.PPM,775 / SonicServer.PPM);
+		cdef.position.set(64 / SonicServer.PPM,775 / SonicServer.PPM);
 		cdef.type = BodyDef.BodyType.DynamicBody;
 		b2cuerpo = mundo.createBody(cdef);
 		

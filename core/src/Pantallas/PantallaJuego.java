@@ -1,7 +1,6 @@
 package Pantallas;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
@@ -27,6 +26,7 @@ import Escenas.Hud;
 import Herramientas.B2CreaMundos;
 import Herramientas.WorldContactListener;
 import Sprites.Sonic;
+import Sprites.Sonic.Estado;
 import Sprites.Tails;
 import utiles.Global;
 
@@ -104,7 +104,6 @@ public class PantallaJuego implements Screen {
 		
         SonicServer.admin.get("audio/musica/menu.mp3", Music.class).stop();
         SonicServer.admin.get("audio/musica/gameOver.mp3", Music.class).stop();
-        SonicServer.admin.get("audio/musica/pantallaJuego.mp3", Music.class).play();
 	}
 	
 	public TextureAtlas getAtlas() {
@@ -115,24 +114,19 @@ public class PantallaJuego implements Screen {
 		return atlasAlt;
 	}
 	
+	public synchronized Sonic getJugador() {
+		return jugador;
+    }
+
+	public synchronized Tails getJugadorAlt() {
+        return jugadorAlt;
+	}	
+	
 	@Override
 	public void show() {
 	}
 	
-	public void handleInput() {
-		if(jugador.estadoActual != Sonic.Estado.MUERTO) {
-			if(Gdx.input.isKeyJustPressed(Input.Keys.UP) && jugador.estadoActual != Sonic.Estado.SALTANDO) {
-			
-			}
-			if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			}
-			if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			}
-		}
-	}
-	
 	public void update(float dt) {
-	    handleInput();
 
 	    mundo.step(1 / 60f, 6, 2);
 
@@ -142,34 +136,30 @@ public class PantallaJuego implements Screen {
 
 	    float limiteIzquierdo = 3.5f;
 	    float limiteDerecho = 20.25f;
-	    float limiteInferior = 2.55f; 
+	    float limiteInferior = 8.55f; 
 	    float limiteSuperior = 55.0f;
-	    float posX = jugador.b2cuerpo.getPosition().x;
-	    float posY = jugador.b2cuerpo.getPosition().y;
-
-
+	    
 	    // Asegurarse de que el personaje no se salga del límite izquierdo
-	    if (posX < limMapa1) {
+	    if (jugador.b2cuerpo.getPosition().x < limMapa1) {
 	        jugador.b2cuerpo.setTransform(limMapa1, jugador.b2cuerpo.getPosition().y, 0);
 	    }
 	    
-	    if (posY < limMapa1) {
+	    if (jugador.b2cuerpo.getPosition().y < limMapa1) {
 	        jugador.golpe();
 	        jugadorAlt.golpe();
 	    }
 
 	    // Asegurarse de que el personaje no se salga del límite derecho
-	    if (posX > limMapa2) {
+	    if (jugador.b2cuerpo.getPosition().x > limMapa2) {
 	        jugador.b2cuerpo.setTransform(limMapa2, jugador.b2cuerpo.getPosition().y, 0);
 	    }
 
 	    
-	    if (posX > limiteIzquierdo && posX < limiteDerecho) {
-	        camJuego.position.x = posX;
-	    }
-	    
-	    if (posY > limiteInferior && posY < limiteSuperior) {
-	        camJuego.position.y = posY;
+	    if (jugador.b2cuerpo.getPosition().x > limiteIzquierdo && jugador.b2cuerpo.getPosition().x < limiteDerecho &&
+	    		jugador.b2cuerpo.getPosition().y > limiteInferior && jugador.b2cuerpo.getPosition().y < limiteSuperior) {
+	    	camJuego.position.x = jugador.getX();
+	    	camJuego.position.y = jugador.getY();
+	    	hs.enviarMsgATodos("Actualizar-camara-" + jugador.b2cuerpo.getPosition().x + "-" + jugador.b2cuerpo.getPosition().y);  
 	    }
 
 	    camJuego.update();
@@ -184,11 +174,19 @@ public class PantallaJuego implements Screen {
 		}else {
 			update(delta);
 			
+			SonicServer.admin.get("audio/musica/pantallaJuego.mp3", Music.class).play();
+			
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			
 			fondo.render(0.80f, 75);
 			renderizar.render();
+			
+			hs.enviarMsgATodos("Actualizar-jugador-"+ (jugador.b2cuerpo.getPosition().x - jugador.getWidth() / 2) +
+					"-" + (jugador.b2cuerpo.getPosition().y - jugador.getHeight() / 2));
+			hs.enviarMsgATodos("Estado-jugador-" + jugador.estadoActual);
+			hs.enviarMsgATodos("Actualizar-jugadorAlt-"+jugadorAlt.b2cuerpo.getPosition().x + "-" + jugadorAlt.b2cuerpo.getPosition().y );
+			hs.enviarMsgATodos("Estado-jugadorAlt-" + jugadorAlt.estadoActual);
 			
 			//box2d
 			b2dr.render(mundo, camJuego.combined);
@@ -201,8 +199,6 @@ public class PantallaJuego implements Screen {
 			
 			juego.batch.setProjectionMatrix(hud.escenario.getCamera().combined);
 			hud.escenario.draw();
-			
-			hs.enviarMsgATodos("Actualizar-jugador-"+jugador.getX()+"-Actualizar-jugadorAlt-"+jugadorAlt.getX());
 			
 		    if (FinJuego()) {
 		        tiempoEspera -= delta; // Reduzca el tiempo de espera

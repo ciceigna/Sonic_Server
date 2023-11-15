@@ -159,16 +159,17 @@ public class Sonic extends Sprite {
 
 	
 	public Estado getEstado() {
-		if(murioSonic)
+		if(murioSonic) {
 			return Estado.MUERTO;
-		else if(b2cuerpo.getLinearVelocity().y > 0 || (b2cuerpo.getLinearVelocity().y < 0 && estadoPrevio == Estado.SALTANDO)) 
+		} else if(b2cuerpo.getLinearVelocity().y > 0 || (b2cuerpo.getLinearVelocity().y < 0 && estadoPrevio == Estado.SALTANDO)) {
 			return Estado.SALTANDO;
-		else if(b2cuerpo.getLinearVelocity().y < 0)
+		} else if(b2cuerpo.getLinearVelocity().y < 0) {
 			return Estado.CAYENDO;
-		else if(b2cuerpo.getLinearVelocity().x != 0)
+		} else if(b2cuerpo.getLinearVelocity().x != 0) {
 			return Estado.CORRIENDO;
-		else 
+		} else { 
 			return Estado.PARADO;
+		}
 	}
 	
 	public void defineSonic() {

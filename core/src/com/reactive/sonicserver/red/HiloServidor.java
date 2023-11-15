@@ -22,12 +22,13 @@ public class HiloServidor extends Thread {
 	
 	public HiloServidor(PantallaJuego app) {
 		this.app = app;
-		
+
 		try {
 			socket = new DatagramSocket(puerto);
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
 	@Override
@@ -93,50 +94,6 @@ public class HiloServidor extends Thread {
 				}
 			}
 		}
-//			if (nroCliente == 0) {
-//				if(msg.equals("teclaArriba")) {
-//					if(nroCliente==0) {
-//						app.jugador.b2cuerpo.applyLinearImpulse(new Vector2(0, 6f), app.jugador.b2cuerpo.getWorldCenter(), true);
-//					}else {
-//						
-//					}
-//				} else if (msg.equals("teclaDer")) {
-//					if(nroCliente==0) {
-//						app.jugador.b2cuerpo.applyLinearImpulse(new Vector2(0.105f, 0), app.jugador.b2cuerpo.getWorldCenter(), true);
-//					}else {
-//						
-//					}
-//				} else if(msg.equals("teclaIzq")) {
-//					if(nroCliente==0) {
-//						app.jugador.b2cuerpo.applyLinearImpulse(new Vector2(-0.105f, 0), app.jugador.b2cuerpo.getWorldCenter(), true);
-//					}else {
-//						
-//					}
-//				}
-//			} else if (nroCliente == 1) {
-//				if(nroCliente!=-1) {
-//					if(msg.equals("teclaArriba")) {
-//						if(nroCliente==0) {
-//							app.jugadorAlt.b2cuerpo.applyLinearImpulse(new Vector2(0, 6f), app.jugador.b2cuerpo.getWorldCenter(), true);
-//						}else {
-//							
-//						}
-//					} else if (msg.equals("teclaDer")) {
-//						if(nroCliente==0) {
-//							app.jugadorAlt.b2cuerpo.applyLinearImpulse(new Vector2(0.105f, 0), app.jugador.b2cuerpo.getWorldCenter(), true);
-//						}else {
-//							
-//						}
-//					} else if(msg.equals("teclaIzq")) {
-//						if(nroCliente==0) {
-//							app.jugadorAlt.b2cuerpo.applyLinearImpulse(new Vector2(-0.105f, 0), app.jugador.b2cuerpo.getWorldCenter(), true);
-//						}else {
-//							
-//						}
-//					}
-//			}
-//			}
-//		}
 	}
 
 	public void enviarMensaje(String mensaje, InetAddress ipDestino, int puerto) {
@@ -157,7 +114,7 @@ public class HiloServidor extends Thread {
 
 	public void enviarMsgATodos(String msg) {
 		for (int i=0; i<clientes.length; i++) {
-			enviarMensaje(msg,clientes[i].getIp(),clientes[i].getPuerto());
+		enviarMensaje(msg,clientes[i].getIp(),clientes[i].getPuerto());
 		}
 	}
 
