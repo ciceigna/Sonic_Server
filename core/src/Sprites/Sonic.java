@@ -1,6 +1,5 @@
 package Sprites;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -30,17 +29,13 @@ public class Sonic extends Sprite {
 	private TextureRegion sonicMuerto;
 	private Animation<TextureRegion> sonicCorre;
 	private Animation<TextureRegion> sonicSalta;
-	private Animation<TextureRegion> sonicVelMax;
 	
 	private float estadoTiempo;
-	private float velocidadMaxima = 5.0f; // Define tu velocidad máxima
-	private float tiempoCorriendo = 0;
-	private float tiempoMaximo = 1.0f; // Tiempo en segundos antes de mostrar "velMax"
 	private boolean murioSonic;
 	
-	public Sonic(World mundo, PantallaJuego pantalla) {
+	public Sonic(PantallaJuego pantalla) {
 	    super(pantalla.getAtlas().findRegion("basicMotion1")); // Inicializa con la primera región de "basicMotion"
-	    this.mundo = mundo;
+	    this.mundo = pantalla.getMundo();
 	    estadoActual = Estado.PARADO;
 	    estadoPrevio = Estado.PARADO;
 	    estadoTiempo = 0;
@@ -71,51 +66,26 @@ public class Sonic extends Sprite {
 	    setBounds(0, 0, getWidth() / SonicServer.PPM, getHeight() / SonicServer.PPM);
 	    setRegion(sonicQuieto);
 	    
-	    Array<TextureAtlas.AtlasRegion> regionesVelMax = new Array<>();
-	    for (int i = 1; i <= 4; i++) {
-	    	regionName = "velMax" + i;
-	        regionesVelMax.add(pantalla.getAtlas().findRegion(regionName));
-	    }
-	    sonicVelMax = new Animation<TextureRegion>(0.08f, regionesVelMax);
 	}
 
 	public void golpe() {
-//		if(tieneAnillos) {
-//			tieneAnillos=false;
-//			
-//		}
-//		else {
+		if(estadoActual.equals(Estado.SALTANDO)) {
+			
+		} else {
 			Filter filtro = new Filter();
 			filtro.maskBits = SonicServer.BIT_VACIO;
 
-			SonicServer.admin.get("audio/sonidos/s_muerte.wav", Sound.class).play();
 			for(Fixture fixture : b2cuerpo.getFixtureList()) {
 				fixture.setFilterData(filtro);
 			}
 			b2cuerpo.applyLinearImpulse(new Vector2(0, 4f), b2cuerpo.getWorldCenter(), true);
 			murioSonic = true;
-//			}
+		}
 	}
 	
 	public void update(float dt) {
 		setPosition(b2cuerpo.getPosition().x - getWidth() / 2, b2cuerpo.getPosition().y - getHeight() / 2);
 		setRegion(getFrame(dt));
-		
-		 if (b2cuerpo.getLinearVelocity().x > velocidadMaxima) {
-		        tiempoCorriendo += dt;
-
-		        if (tiempoCorriendo >= tiempoMaximo && estadoActual != Estado.VELOCIDAD_MAXIMA) {
-		            estadoPrevio = estadoActual;
-		            estadoActual = Estado.VELOCIDAD_MAXIMA;
-		        }
-		    } else {
-		        tiempoCorriendo = 0;
-
-		        // Volver al estado anterior cuando la velocidad baja
-		        if (estadoActual == Estado.VELOCIDAD_MAXIMA) {
-		            estadoActual = estadoPrevio;
-		        }
-		    }
 	}
 	
 	public TextureRegion getFrame(float dt) {
@@ -131,9 +101,6 @@ public class Sonic extends Sprite {
 	            break;
 	        case CORRIENDO:
 	            region = sonicCorre.getKeyFrame(estadoTiempo, true);
-	            break;
-	        case VELOCIDAD_MAXIMA:
-	            region = sonicVelMax.getKeyFrame(estadoTiempo, true);
 	            break;
 	        case CAYENDO:
 	        case PARADO:
@@ -182,9 +149,17 @@ public class Sonic extends Sprite {
 		CircleShape forma = new CircleShape();
 		forma.setRadius(16 / SonicServer.PPM);
 		
+	    fdef.filter.categoryBits = SonicServer.BIT_SONIC;
+	    fdef.filter.maskBits = SonicServer.BIT_PISO |
+	            SonicServer.BIT_ANILLO |
+	            SonicServer.BIT_ENEMIGO |
+	            SonicServer.BIT_OBJETO |
+	            SonicServer.BIT_SONIC;
+	    
 		fdef.shape = forma;
 		b2cuerpo.createFixture(fdef);
-		
+		b2cuerpo.setUserData(this);
+
 		EdgeShape cabeza = new EdgeShape();
 		cabeza.set(new Vector2(-2 / SonicServer.PPM, 5 / SonicServer.PPM), new Vector2(2 / SonicServer.PPM, 5 / SonicServer.PPM));
 		fdef.shape = cabeza;

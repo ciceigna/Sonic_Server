@@ -40,11 +40,45 @@ public class HiloServidor extends Thread {
 	            socket.receive(dp);
 	            procesarMensaje(dp);
 	        } catch (IOException e) {
-	            e.printStackTrace();
+	            System.err.println("Error al recibir un paquete: " + e.getMessage());
+	            desconectarCliente(dp.getAddress(), dp.getPort());
 	        }
 	    } while (!fin);
 	}
 
+	public void enviarMensajeConTiempo(String mensaje, InetAddress ipDestino, int puerto) {
+	    long tiempoActual = System.currentTimeMillis();
+	    String mensajeConTiempo = tiempoActual + "-" + mensaje;
+	    byte[] data = mensajeConTiempo.getBytes();
+	    DatagramPacket dp = new DatagramPacket(data, data.length, ipDestino, puerto);
+	    try {
+	        socket.send(dp);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+
+	private void desconectarCliente(InetAddress ip, int puerto) {
+	    System.out.println("Cliente desconectado: " + ip + ":" + puerto);
+
+	    eliminarCliente(ip, puerto);
+
+	}
+	
+	private void eliminarCliente(InetAddress ip, int puerto) {
+	    // Elimina al cliente de la lista de clientes.
+	    for (int i = 0; i < clientes.length; i++) {
+	        if (clientes[i] != null && clientes[i].getIp().equals(ip) && clientes[i].getPuerto() == puerto) {
+	            clientes[i] = null;
+	            cantClientes--;
+	        }
+	    }
+	}
+
+	
+	public void detenerServidor() {
+	    fin = true;
+	}
 
 	private void procesarMensaje(DatagramPacket dp) {
 		String msg = (new String(dp.getData())).trim();
@@ -97,20 +131,24 @@ public class HiloServidor extends Thread {
 	}
 
 	public void enviarMensaje(String mensaje, InetAddress ipDestino, int puerto) {
-		byte[] data = mensaje.getBytes();
-		DatagramPacket dp = new DatagramPacket(data,data.length,ipDestino, puerto);
-		try {
-			socket.send(dp);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	    try {
+	        byte[] data = mensaje.getBytes();
+	        DatagramPacket dp = new DatagramPacket(data, data.length, ipDestino, puerto);
+	        socket.send(dp);
+	    } catch (IOException e) {
+	        System.err.println("Error al enviar un mensaje: " + e.getMessage());
+	        e.printStackTrace();
+	    }
 	}
+
 	
 	public void dispose() {
+	    fin = true;
 	    if (socket != null && !socket.isClosed()) {
 	        socket.close();
 	    }
 	}
+
 
 	public void enviarMsgATodos(String msg) {
 		for (int i=0; i<clientes.length; i++) {

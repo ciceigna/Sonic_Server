@@ -12,9 +12,14 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.sonic.servidor.SonicServer;
 
+import Pantallas.PantallaJuego;
+
 public class B2CreaMundos {
 
-	    public B2CreaMundos(World mundo, TiledMap mapa) {
+	    public B2CreaMundos(PantallaJuego pantalla) {
+	    	World mundo = pantalla.getMundo();
+	    	TiledMap mapa = pantalla.getMapa();
+	    	
 	        crearCuerposYFixtures(mundo, mapa, "piso", BodyDef.BodyType.StaticBody);
 	        crearCuerposYFixtures(mundo, mapa, "colinas", BodyDef.BodyType.StaticBody);
 	    }    private void crearCuerposYFixtures(World mundo, TiledMap mapa, String capa, BodyDef.BodyType tipo) {
@@ -37,7 +42,7 @@ public class B2CreaMundos {
 
 	            forma.setAsBox(rect.getWidth() / 2 / SonicServer.PPM, rect.getHeight() / 2 / SonicServer.PPM);
 	            fdef.shape = forma;
-
+	            fdef.filter.categoryBits = SonicServer.BIT_OBJETO;
 	            cuerpo = mundo.createBody(cdef);
 	            cuerpo.createFixture(fdef);
 

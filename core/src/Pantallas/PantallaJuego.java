@@ -20,13 +20,12 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.reactive.sonicserver.red.HiloServidor;
 import com.sonic.servidor.SonicServer;
-
 import Escenas.FondoParallax;
 import Escenas.Hud;
 import Herramientas.B2CreaMundos;
 import Herramientas.WorldContactListener;
+import Sprites.Buzzer;
 import Sprites.Sonic;
-import Sprites.Sonic.Estado;
 import Sprites.Tails;
 import utiles.Global;
 
@@ -35,10 +34,15 @@ public class PantallaJuego implements Screen {
 	private SonicServer juego;
 	private OrthographicCamera camJuego;
 	private Viewport vistaJuego; 
+	
 	private TextureAtlas atlas;
 	private TextureAtlas atlasAlt;
+	private TextureAtlas enemigos;
+	
 	public Sonic jugador;
 	public Tails jugadorAlt;
+	public Buzzer buzzer;
+	
     float limMapa1 = 0.25f;
     float limMapa2 = 23.5f;
     private HiloServidor hs;
@@ -77,6 +81,8 @@ public class PantallaJuego implements Screen {
 		
 		atlas = new TextureAtlas("texturaSonic.atlas");
 		atlasAlt = new TextureAtlas("texturaTails.atlas");
+		enemigos = new TextureAtlas("texturaEnemigos.atlas");
+		
 		camJuego = new OrthographicCamera();
 		vistaJuego = new FitViewport(SonicServer.V_ANCHO / SonicServer.PPM,SonicServer.V_ALTO / SonicServer.PPM,camJuego);
 		
@@ -95,10 +101,11 @@ public class PantallaJuego implements Screen {
 		mundo = new World(new Vector2(0, -9), true);
 		b2dr = new Box2DDebugRenderer();
 		
-		new B2CreaMundos(mundo, mapa);
+		new B2CreaMundos(this);
 		
-		jugador = new Sonic(mundo, this);
-		jugadorAlt = new Tails(mundo, this);
+		jugador = new Sonic(this);
+		jugadorAlt = new Tails(this);
+		buzzer = new Buzzer(this, 200 / SonicServer.PPM, 800 / SonicServer.PPM );
 		
 		mundo.setContactListener(new WorldContactListener());
 		
@@ -112,6 +119,10 @@ public class PantallaJuego implements Screen {
 	
 	public TextureAtlas getAtlasAlt() {
 		return atlasAlt;
+	}
+	
+	public TextureAtlas getEnemigos() {
+		return enemigos;
 	}
 	
 	public synchronized Sonic getJugador() {
@@ -132,6 +143,7 @@ public class PantallaJuego implements Screen {
 
 	    jugador.update(dt);
 	    jugadorAlt.update(dt);
+	    buzzer.update(dt);
 	    hud.update(dt);
 
 	    float limiteIzquierdo = 3.5f;
@@ -195,6 +207,7 @@ public class PantallaJuego implements Screen {
 			juego.batch.begin();
 			jugador.draw(juego.batch);
 			jugadorAlt.draw(juego.batch);
+		    buzzer.draw(juego.batch);
 			juego.batch.end();
 			
 			juego.batch.setProjectionMatrix(hud.escenario.getCamera().combined);
@@ -202,9 +215,7 @@ public class PantallaJuego implements Screen {
 			
 		    if (FinJuego()) {
 		        tiempoEspera -= delta; // Reduzca el tiempo de espera
-
 		        if (tiempoEspera <= 0 && !cambioPantalla) {
-		            // Cuando el tiempo de espera haya transcurrido y no hayamos cambiado de pantalla aún
 		            juego.setScreen(new PantallaGameOver(juego));
 		            cambioPantalla = true; // Evita que cambiemos de pantalla varias veces
 		        }
@@ -214,7 +225,7 @@ public class PantallaJuego implements Screen {
 	}
 	
 	public boolean FinJuego() {
-		if(jugador.estadoActual == Sonic.Estado.MUERTO) {
+		if(jugador.estadoActual == Sonic.Estado.MUERTO || jugadorAlt.estadoActual == Tails.Estado.MUERTO) {
 			return true;
 		}else {
 			return false;
@@ -225,7 +236,15 @@ public class PantallaJuego implements Screen {
 	public void resize(int width, int height) {
 		vistaJuego.update(width, height);
 	}
+	
+	public TiledMap getMapa() {
+		return mapa;
+	}
 
+	public World getMundo() {
+		return mundo;
+	}
+	
 	@Override
 	public void pause() {
 	}

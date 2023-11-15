@@ -29,7 +29,6 @@ public class PantallaAjustes extends ScreenAdapter {
     private Slider barraVolMusica;
 	private Slider barraVolSonido;
     private TextButton aplicarButton; // Botón para aplicar y guardar cambios
-    private Slider volumenGeneralSlider;
     private CheckBox fullscreenCheckbox;
 
     public PantallaAjustes(final SonicServer juego) {

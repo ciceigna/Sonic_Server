@@ -12,10 +12,12 @@ public abstract class Enemigo extends Sprite {
 	public Body b2cuerpo;
 	
 	public Enemigo(PantallaJuego pantalla, float x, float y) {
-//		this.mundo = pantalla.getWorld();
+		this.mundo = pantalla.getMundo();
 		this.pantalla = pantalla;
 		setPosition(x, y);
+		defineEnemigo();
 	}
 	
 	protected abstract void defineEnemigo();
+	protected abstract void muerte();
 }

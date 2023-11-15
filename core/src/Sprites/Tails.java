@@ -1,6 +1,5 @@
 package Sprites;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -20,7 +19,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 
 public class Tails extends Sprite {
-	public enum Estado{CAYENDO,SALTANDO,PARADO,CORRIENDO, VELOCIDAD_MAXIMA, MUERTO}
+	public enum Estado{CAYENDO,SALTANDO,PARADO,CORRIENDO, CORRIENDO_IZQ, MUERTO}
 	public Estado estadoActual;
 	public Estado estadoPrevio;
 	public World mundo;
@@ -30,17 +29,12 @@ public class Tails extends Sprite {
 	private TextureRegion TailsMuerto;
 	private Animation<TextureRegion> TailsCorre;
 	private Animation<TextureRegion> TailsSalta;
-	private Animation<TextureRegion> TailsVelMax;
-	
 	private float estadoTiempo;
-	private float velocidadMaxima = 5.0f; // Define tu velocidad máxima
-	private float tiempoCorriendo = 0;
-	private float tiempoMaximo = 1.0f; // Tiempo en segundos antes de mostrar "velMax"
 	private boolean murioTails;
 	
-	public Tails(World mundo, PantallaJuego pantalla) {
+	public Tails(PantallaJuego pantalla) {
 	    super(pantalla.getAtlasAlt().findRegion("basicMotion1")); // Inicializa con la primera región de "basicMotion"
-	    this.mundo = mundo;
+	    this.mundo = pantalla.getMundo();
 	    estadoActual = Estado.PARADO;
 	    estadoPrevio = Estado.PARADO;
 	    estadoTiempo = 0;
@@ -64,9 +58,6 @@ public class Tails extends Sprite {
 	    // Crea la animación
 	    TailsCorre = new Animation<TextureRegion>(0.1f, frames);
 	    frames.clear();
-
-	    TailsQuieto = new Animation<TextureRegion>(0.1f, frames);
-	    frames.clear();
 	    
 	 // Carga al tails quieto
 	    for (int i = 1; i <= 4; i++) {
@@ -84,42 +75,24 @@ public class Tails extends Sprite {
 	}
 
 	public void golpe() {
-//		if(tieneAnillos) {
-//			tieneAnillos=false;
-//			
-//		}
-//		else {
+		if(estadoActual.equals(Estado.SALTANDO)) {
+			
+		} else {
 			Filter filtro = new Filter();
 			filtro.maskBits = SonicServer.BIT_VACIO;
 
-			SonicServer.admin.get("audio/sonidos/s_muerte.wav", Sound.class).play();
 			for(Fixture fixture : b2cuerpo.getFixtureList()) {
 				fixture.setFilterData(filtro);
 			}
 			b2cuerpo.applyLinearImpulse(new Vector2(0, 4f), b2cuerpo.getWorldCenter(), true);
 			murioTails = true;
-//			}
+		}
 	}
 	
 	public void update(float dt) {
 		setPosition(b2cuerpo.getPosition().x - getWidth() / 2, b2cuerpo.getPosition().y - getHeight() / 2);
 		setRegion(getFrame(dt));
 		
-		 if (b2cuerpo.getLinearVelocity().x > velocidadMaxima) {
-		        tiempoCorriendo += dt;
-
-		        if (tiempoCorriendo >= tiempoMaximo && estadoActual != Estado.VELOCIDAD_MAXIMA) {
-		            estadoPrevio = estadoActual;
-		            estadoActual = Estado.VELOCIDAD_MAXIMA;
-		        }
-		    } else {
-		        tiempoCorriendo = 0;
-
-		        // Volver al estado anterior cuando la velocidad baja
-		        if (estadoActual == Estado.VELOCIDAD_MAXIMA) {
-		            estadoActual = estadoPrevio;
-		        }
-		    }
 	}
 	
 	public TextureRegion getFrame(float dt) {
@@ -136,8 +109,8 @@ public class Tails extends Sprite {
 	        case CORRIENDO:
 	            region = TailsCorre.getKeyFrame(estadoTiempo, true);
 	            break;
-	        case VELOCIDAD_MAXIMA:
-	            region = TailsVelMax.getKeyFrame(estadoTiempo, true);
+	        case CORRIENDO_IZQ:
+	            region = TailsCorre.getKeyFrame(estadoTiempo, true);
 	            break;
 	        case CAYENDO:
 	        case PARADO:
@@ -172,8 +145,10 @@ public class Tails extends Sprite {
 			return Estado.SALTANDO;
 		else if(b2cuerpo.getLinearVelocity().y < 0)
 			return Estado.CAYENDO;
-		else if(b2cuerpo.getLinearVelocity().x != 0)
+		else if(b2cuerpo.getLinearVelocity().x > 0)
 			return Estado.CORRIENDO;
+		else if(b2cuerpo.getLinearVelocity().x < 0)
+			return Estado.CORRIENDO_IZQ;
 		else 
 			return Estado.PARADO;
 	}
@@ -186,11 +161,19 @@ public class Tails extends Sprite {
 		
 		FixtureDef fdef = new FixtureDef();
 		CircleShape forma = new CircleShape();
-		forma.setRadius(10 / SonicServer.PPM);
+		forma.setRadius(15 / SonicServer.PPM);
+		
+	    fdef.filter.categoryBits = SonicServer.BIT_SONIC;
+	    fdef.filter.maskBits = SonicServer.BIT_PISO |
+	            SonicServer.BIT_ANILLO |
+	            SonicServer.BIT_ENEMIGO |
+	            SonicServer.BIT_OBJETO |
+	            SonicServer.BIT_SONIC;
 		
 		fdef.shape = forma;
 		b2cuerpo.createFixture(fdef);
-		
+		b2cuerpo.setUserData(this);
+
 		EdgeShape cabeza = new EdgeShape();
 		cabeza.set(new Vector2(-2 / SonicServer.PPM, 5 / SonicServer.PPM), new Vector2(2 / SonicServer.PPM, 5 / SonicServer.PPM));
 		fdef.shape = cabeza;
