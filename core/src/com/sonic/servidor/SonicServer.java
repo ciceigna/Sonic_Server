@@ -16,13 +16,12 @@ public class SonicServer extends Game {
 	public static final short BIT_VACIO = 0;
 	public static final short BIT_PISO = 1;
 	public static final short BIT_SONIC = 2;
-	public static final short BIT_ANILLO = 8;
-	public static final short BIT_DESTRUIDO = 16;
-	public static final short BIT_OBJETO = 32;
-	public static final short BIT_ENEMIGO = 64;
-	public static final short BIT_CAPOCHA_E = 128;
-	public static final short BIT_ITEM = 256;
-	public static final short BIT_CAPOCHA_J = 512;
+	public static final short BIT_ANILLO = 4;
+	public static final short BIT_DESTRUIDO = 8;
+	public static final short BIT_OBJETO = 16;
+	public static final short BIT_ENEMIGO = 32;
+	public static final short BIT_CAPOCHA_E = 64;
+	public static final short BIT_ITEM = 128;
 	
 	public SpriteBatch batch;
 	

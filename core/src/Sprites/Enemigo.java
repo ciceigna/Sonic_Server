@@ -19,5 +19,5 @@ public abstract class Enemigo extends Sprite {
 	}
 	
 	protected abstract void defineEnemigo();
-	protected abstract void muerte();
+	public abstract void muerte();
 }

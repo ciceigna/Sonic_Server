@@ -5,19 +5,14 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.sonic.servidor.SonicServer;
 
 public class PantallaGameOver extends ScreenAdapter {
     private Stage stage;
-    Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 
     public PantallaGameOver(final SonicServer juego) {
         stage = new Stage(new FitViewport(SonicServer.V_ANCHO, SonicServer.V_ALTO));
@@ -38,30 +33,6 @@ public class PantallaGameOver extends ScreenAdapter {
 
         // Agregar la imagen "gOver" al centro de la pantalla
         table.add(gOverImage).expand().center().row();
-
-        // Crear botón para reiniciar
-        TextButton restartButton = new TextButton("Reiniciar", skin);
-        restartButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                // Agregar aquí la lógica para reiniciar el juego
-                juego.setScreen(new PantallaJuego(juego));
-            }
-        });
-
-        // Crear botón para ir al menú principal
-        TextButton menuButton = new TextButton("Menu Principal", skin);
-        menuButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                // Agregar aquí la lógica para ir al menú principal
-                juego.setScreen(new PantallaMenu(juego));
-            }
-        });
-
-        // Agregar botones a la tabla
-        table.add(restartButton).padBottom(20f).row();
-        table.add(menuButton);
     }
 
     @Override

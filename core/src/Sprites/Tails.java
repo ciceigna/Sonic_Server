@@ -8,10 +8,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.sonic.servidor.SonicServer;
 import com.badlogic.gdx.utils.Array;
 import Pantallas.PantallaJuego;
+import Pantallas.PantallaJuego.TipoTextura;
+
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -33,7 +34,7 @@ public class Tails extends Sprite {
 	private boolean murioTails;
 	
 	public Tails(PantallaJuego pantalla) {
-	    super(pantalla.getAtlasAlt().findRegion("basicMotion1")); // Inicializa con la primera región de "basicMotion"
+	    super(pantalla.getTextura(TipoTextura.TAILS).findRegion("basicMotion1")); // Inicializa con la primera región de "basicMotion"
 	    this.mundo = pantalla.getMundo();
 	    estadoActual = Estado.PARADO;
 	    estadoPrevio = Estado.PARADO;
@@ -45,13 +46,13 @@ public class Tails extends Sprite {
 	    // Carga las regiones etiquetadas como "basicMotion" desde el atlas
 	    for (int i = 1; i <= 8; i++) {
 	        regionName = "basicMotion" + i;
-	        frames.add(pantalla.getAtlasAlt().findRegion(regionName));
+	        frames.add(pantalla.getTextura(TipoTextura.TAILS).findRegion(regionName));
 	    }
 	    
 	    Array<TextureAtlas.AtlasRegion> regionesSalto = new Array<>();
 	    for (int i = 1; i <= 3; i++) {
 	    	regionName = "bola" + i;
-	        regionesSalto.add(pantalla.getAtlasAlt().findRegion(regionName));
+	        regionesSalto.add(pantalla.getTextura(TipoTextura.TAILS).findRegion(regionName));
 	    }
 	    TailsSalta = new Animation<TextureRegion>(0.08f, regionesSalto);
 
@@ -62,14 +63,14 @@ public class Tails extends Sprite {
 	 // Carga al tails quieto
 	    for (int i = 1; i <= 4; i++) {
 	        regionName = "quieto" + i;
-	        frames.add(pantalla.getAtlasAlt().findRegion(regionName));
+	        frames.add(pantalla.getTextura(TipoTextura.TAILS).findRegion(regionName));
 	    }
 	    TailsQuieto = new Animation<TextureRegion>(0.16f, frames); // Configura la animación
 	    frames.clear(); // No elimines las regiones de "frames"
 
 	    defineTails();
 	    TailsMuerto = new TextureRegion(getTexture(), 1541, 17, 29, 32);
-	    setBounds(0, 0, getRegionWidth() / SonicServer.PPM, getRegionHeight() / SonicServer.PPM);
+	    setBounds(0, 0, getWidth() / SonicServer.PPM, getHeight() / SonicServer.PPM);
 	    setRegion(TailsQuieto.getKeyFrame(estadoTiempo, true));
 
 	}
@@ -102,6 +103,8 @@ public class Tails extends Sprite {
 	    switch (estadoActual) {
 		    case MUERTO:
 		    	region = TailsMuerto;
+		        b2cuerpo.applyLinearImpulse(new Vector2(0, 4f), b2cuerpo.getWorldCenter(), true);
+		        murioTails = true;
 		    	break;
 	        case SALTANDO:
 	            region = TailsSalta.getKeyFrame(estadoTiempo, true);
@@ -155,7 +158,7 @@ public class Tails extends Sprite {
 	
 	public void defineTails() {
 		BodyDef cdef = new BodyDef();
-		cdef.position.set(64 / SonicServer.PPM,775 / SonicServer.PPM);
+		cdef.position.set(200 / SonicServer.PPM,775 / SonicServer.PPM);
 		cdef.type = BodyDef.BodyType.DynamicBody;
 		b2cuerpo = mundo.createBody(cdef);
 		
@@ -167,18 +170,12 @@ public class Tails extends Sprite {
 	    fdef.filter.maskBits = SonicServer.BIT_PISO |
 	            SonicServer.BIT_ANILLO |
 	            SonicServer.BIT_ENEMIGO |
-	            SonicServer.BIT_OBJETO |
-	            SonicServer.BIT_SONIC;
+	            SonicServer.BIT_OBJETO;
 		
 		fdef.shape = forma;
 		b2cuerpo.createFixture(fdef);
 		b2cuerpo.setUserData(this);
-
-		EdgeShape cabeza = new EdgeShape();
-		cabeza.set(new Vector2(-2 / SonicServer.PPM, 5 / SonicServer.PPM), new Vector2(2 / SonicServer.PPM, 5 / SonicServer.PPM));
-		fdef.shape = cabeza;
 		fdef.isSensor = true;
-		b2cuerpo.createFixture(fdef).setUserData("cabeza");
 	}
 	
 	

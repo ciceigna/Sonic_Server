@@ -1,82 +1,117 @@
 
 texturaEnemigos.png
-size: 268, 32
+size: 444, 32
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 buzzer1
   rotate: false
-  xy: 0, 6
-  size: 48, 26
+  xy: 50, 0
+  size: 48, 32
   orig: 48, 32
-  offset: 0, 6
+  offset: 0, 0
   index: -1
 buzzer2
   rotate: false
-  xy: 142, 16
-  size: 48, 16
+  xy: 0, 0
+  size: 48, 32
   orig: 48, 32
-  offset: 0, 16
+  offset: 0, 0
   index: -1
 buzzer3
   rotate: false
-  xy: 50, 6
-  size: 48, 26
+  xy: 100, 0
+  size: 48, 32
   orig: 48, 32
-  offset: 0, 6
+  offset: 0, 0
   index: -1
 buzzer4
   rotate: false
-  xy: 100, 1
-  size: 40, 31
+  xy: 150, 0
+  size: 40, 32
   orig: 48, 32
-  offset: 0, 1
+  offset: 0, 0
   index: -1
 buzzer5
   rotate: false
-  xy: 142, 4
-  size: 8, 10
+  xy: 415, 16
+  size: 8, 16
   orig: 8, 16
-  offset: 0, 1
+  offset: 0, 0
   index: -1
 buzzer6
   rotate: false
-  xy: 152, 4
-  size: 8, 10
+  xy: 425, 16
+  size: 8, 16
   orig: 8, 16
-  offset: 0, 1
+  offset: 0, 0
   index: -1
 buzzer7
   rotate: false
-  xy: 171, 9
-  size: 6, 5
+  xy: 435, 24
+  size: 6, 8
   orig: 8, 8
-  offset: 1, 3
+  offset: 1, 0
   index: -1
 buzzer8
   rotate: false
-  xy: 162, 9
-  size: 7, 5
+  xy: 397, 6
+  size: 7, 8
   orig: 8, 8
-  offset: 1, 3
+  offset: 1, 0
+  index: -1
+buzzerMuere1
+  rotate: false
+  xy: 397, 16
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+buzzerMuere2
+  rotate: false
+  xy: 225, 0
+  size: 30, 32
+  orig: 32, 32
+  offset: 1, 0
+  index: -1
+buzzerMuere3
+  rotate: false
+  xy: 192, 0
+  size: 31, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+buzzerMuere4
+  rotate: false
+  xy: 257, 0
+  size: 30, 32
+  orig: 32, 32
+  offset: 1, 0
+  index: -1
+buzzerMuere5
+  rotate: false
+  xy: 289, 0
+  size: 28, 32
+  orig: 32, 32
+  offset: 2, 0
   index: -1
 masher1
   rotate: false
-  xy: 248, 0
+  xy: 375, 0
   size: 20, 32
   orig: 32, 32
   offset: 2, 0
   index: -1
 masher2
   rotate: false
-  xy: 220, 2
-  size: 26, 30
+  xy: 347, 0
+  size: 26, 32
   orig: 32, 32
-  offset: 1, 2
+  offset: 1, 0
   index: -1
 masher3
   rotate: false
-  xy: 192, 0
+  xy: 319, 0
   size: 26, 32
   orig: 32, 32
   offset: 2, 0

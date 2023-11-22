@@ -1,5 +1,7 @@
 package Pantallas;
 
+import java.util.PriorityQueue;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -16,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.reactive.sonicserver.red.HiloServidor;
@@ -24,6 +27,9 @@ import Escenas.FondoParallax;
 import Escenas.Hud;
 import Herramientas.B2CreaMundos;
 import Herramientas.WorldContactListener;
+import Items.Anillo;
+import Items.DefItem;
+import Items.Item;
 import Sprites.Buzzer;
 import Sprites.Sonic;
 import Sprites.Tails;
@@ -35,13 +41,18 @@ public class PantallaJuego implements Screen {
 	private OrthographicCamera camJuego;
 	private Viewport vistaJuego; 
 	
-	private TextureAtlas atlas;
-	private TextureAtlas atlasAlt;
+	private TextureAtlas sonic;
+	private TextureAtlas tails;
 	private TextureAtlas enemigos;
+	private TextureAtlas objetos; 
 	
 	public Sonic jugador;
 	public Tails jugadorAlt;
-	public Buzzer buzzer;
+	private Buzzer buzzer;
+//	public Anillos anillo;
+	
+	private Array<Item> items;
+	private PriorityQueue<DefItem> itemsASpawnear;
 	
     float limMapa1 = 0.25f;
     float limMapa2 = 23.5f;
@@ -79,9 +90,10 @@ public class PantallaJuego implements Screen {
 		table.setFillParent(true);
 		stage.addActor(table);
 		
-		atlas = new TextureAtlas("texturaSonic.atlas");
-		atlasAlt = new TextureAtlas("texturaTails.atlas");
+		sonic = new TextureAtlas("texturaSonic.atlas");
+		tails = new TextureAtlas("texturaTails.atlas");
 		enemigos = new TextureAtlas("texturaEnemigos.atlas");
+		objetos = new TextureAtlas("objetos.atlas");
 		
 		camJuego = new OrthographicCamera();
 		vistaJuego = new FitViewport(SonicServer.V_ANCHO / SonicServer.PPM,SonicServer.V_ALTO / SonicServer.PPM,camJuego);
@@ -105,26 +117,50 @@ public class PantallaJuego implements Screen {
 		
 		jugador = new Sonic(this);
 		jugadorAlt = new Tails(this);
-		buzzer = new Buzzer(this, 200 / SonicServer.PPM, 800 / SonicServer.PPM );
+		buzzer = new Buzzer(this, 1000 / SonicServer.PPM, 790 / SonicServer.PPM );
+//		anillo = new Anillos(this, 200 / SonicServer.PPM, 780 / SonicServer.PPM);
+		items = new Array<Item>();
+		itemsASpawnear = new PriorityQueue<DefItem>();
 		
 		mundo.setContactListener(new WorldContactListener());
-		
-        SonicServer.admin.get("audio/musica/menu.mp3", Music.class).stop();
-        SonicServer.admin.get("audio/musica/gameOver.mp3", Music.class).stop();
 	}
 	
-	public TextureAtlas getAtlas() {
-		return atlas;
+	public void manejaSpawnearItems() {
+	    if (!itemsASpawnear.isEmpty()) {
+	        DefItem idef = itemsASpawnear.poll();
+	        if (idef.tipo == Anillo.class) {
+	            spawnearAnillo(300 / SonicServer.PPM, 775 / SonicServer.PPM);
+	        }
+	    }
+	}
+
+	private void spawnearAnillo(float x, float y) {
+	    Item anillo = new Anillo(this, x, y);
+	    items.add(anillo);
 	}
 	
-	public TextureAtlas getAtlasAlt() {
-		return atlasAlt;
+	public TextureAtlas getTextura(TipoTextura tipo) {
+	    switch (tipo) {
+	        case SONIC:
+	            return sonic;
+	        case TAILS:
+	            return tails;
+	        case ENEMIGOS:
+	            return enemigos;
+	        case OBJETOS:
+	            return objetos;
+	        default:
+	            return null;
+	    }
 	}
 	
-	public TextureAtlas getEnemigos() {
-		return enemigos;
+	public enum TipoTextura {
+	    SONIC,
+	    TAILS,
+	    ENEMIGOS,
+	    OBJETOS
 	}
-	
+
 	public synchronized Sonic getJugador() {
 		return jugador;
     }
@@ -138,40 +174,52 @@ public class PantallaJuego implements Screen {
 	}
 	
 	public void update(float dt) {
-
+		manejaSpawnearItems();
+		
 	    mundo.step(1 / 60f, 6, 2);
 
 	    jugador.update(dt);
 	    jugadorAlt.update(dt);
 	    buzzer.update(dt);
+//	    anillo.update(dt);
+	    
+	    for(Item item : items) {
+	    	item.update(dt);
+	    }
+	    
 	    hud.update(dt);
 
 	    float limiteIzquierdo = 3.5f;
-	    float limiteDerecho = 20.25f;
-	    float limiteInferior = 8.55f; 
-	    float limiteSuperior = 55.0f;
+	    float limiteDerecho = 20.2f;
+	    float limiteInferior = 1.30f; 
+	    float limiteSuperior = 30.1f;
 	    
 	    // Asegurarse de que el personaje no se salga del límite izquierdo
 	    if (jugador.b2cuerpo.getPosition().x < limMapa1) {
 	        jugador.b2cuerpo.setTransform(limMapa1, jugador.b2cuerpo.getPosition().y, 0);
+	    } else if (jugadorAlt.b2cuerpo.getPosition().x < limMapa1) {
+	        jugadorAlt.b2cuerpo.setTransform(limMapa1, jugadorAlt.b2cuerpo.getPosition().y, 0);
 	    }
 	    
-	    if (jugador.b2cuerpo.getPosition().y < limMapa1) {
-	        jugador.golpe();
-	        jugadorAlt.golpe();
-	    }
-
 	    // Asegurarse de que el personaje no se salga del límite derecho
 	    if (jugador.b2cuerpo.getPosition().x > limMapa2) {
 	        jugador.b2cuerpo.setTransform(limMapa2, jugador.b2cuerpo.getPosition().y, 0);
 	    }
-
+	    
+	    if (jugador.b2cuerpo.getPosition().y < limiteInferior) {
+	       jugador.estadoActual = Sonic.Estado.MUERTO;
+	    } else if (jugadorAlt.b2cuerpo.getPosition().y < limiteInferior) {
+	    	jugadorAlt.estadoActual = Tails.Estado.MUERTO;
+	    }
+	    
+	    if (jugador.b2cuerpo.getPosition().x > limMapa2) {
+	        jugador.b2cuerpo.setTransform(limMapa2, jugador.b2cuerpo.getPosition().y, 0);
+	    }
 	    
 	    if (jugador.b2cuerpo.getPosition().x > limiteIzquierdo && jugador.b2cuerpo.getPosition().x < limiteDerecho &&
 	    		jugador.b2cuerpo.getPosition().y > limiteInferior && jugador.b2cuerpo.getPosition().y < limiteSuperior) {
 	    	camJuego.position.x = jugador.getX();
 	    	camJuego.position.y = jugador.getY();
-	    	hs.enviarMsgATodos("Actualizar-camara-" + jugador.b2cuerpo.getPosition().x + "-" + jugador.b2cuerpo.getPosition().y);  
 	    }
 
 	    camJuego.update();
@@ -208,6 +256,10 @@ public class PantallaJuego implements Screen {
 			jugador.draw(juego.batch);
 			jugadorAlt.draw(juego.batch);
 		    buzzer.draw(juego.batch);
+//		    anillo.draw(juego.batch);
+			for(Item item : items) {
+				item.draw(juego.batch);
+			}
 			juego.batch.end();
 			
 			juego.batch.setProjectionMatrix(hud.escenario.getCamera().combined);

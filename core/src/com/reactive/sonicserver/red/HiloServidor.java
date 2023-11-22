@@ -88,6 +88,9 @@ public class HiloServidor extends Thread {
 			for(int i = 0; i < clientes.length; i++) {
 				if(dp.getPort()==clientes[i].getPuerto() && dp.getAddress().equals(clientes[i].getIp())) {
 					nroCliente = i;
+					if(nroCliente == 0) {
+						enviarMensaje("primero", clientes[i].getIp(), clientes[i].getPuerto());
+					}
 				}
 			}
 		}

@@ -17,15 +17,15 @@ public class Hud implements Disposable{
 	private Viewport viewport;
 	
 	private float cuentaTiempo;
-	private Integer puntaje;
-	private Integer anillos;
+	private static Integer puntaje;
+	private static Integer anillos;
 
-	Label etiquetaTiempo;
-	Label etiquetaTiempepopo;
-	Label etiquetaPuntaje;
-	Label etiquetaPunputapajepe;
-	Label etiquetaAnillos;
-	Label etiquetaApanipillospo;
+	private Label etiquetaTiempo;
+	private Label etiquetaTiempepopo;
+	private Label etiquetaPuntaje;
+	private static Label etiquetaPunputapajepe;
+	private Label etiquetaAnillos;
+	private static Label etiquetaApanipillospo;
 	
 	public Hud(SpriteBatch sb) {
 		cuentaTiempo = 0;
@@ -67,6 +67,16 @@ public class Hud implements Disposable{
 		    etiquetaTiempepopo.setText(String.format("%02d:%02d", minutos, segundos));
 	}
 
+	public static void addPuntaje(int valor) {
+		puntaje += valor;
+		etiquetaPunputapajepe.setText(String.format("%06d", puntaje));
+	}
+	
+	public static void addAnillo(int valor) {
+		anillos += valor;
+		etiquetaApanipillospo.setText(String.format("%01d", anillos));
+	}
+	
 	@Override
 	public void dispose() {
 		escenario.dispose();
